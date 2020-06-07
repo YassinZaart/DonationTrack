@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         val lnameText : EditText = findViewById(R.id.lName)
         val emailText : EditText = findViewById(R.id.email)
         val logoutButton : Button = findViewById(R.id.logout)
-
+        //This change is to test git workflow
         logoutButton.setOnClickListener { onClick() }
     }
     fun onClick(){
