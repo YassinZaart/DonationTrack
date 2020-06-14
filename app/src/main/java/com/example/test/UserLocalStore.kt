@@ -10,31 +10,38 @@ class UserLocalStore(val context: Context) {
 
     fun storeUserData(user : User){
         val userLocalDatabaseEditor = userLocalDatabase.edit()
-        userLocalDatabaseEditor.putString("fname", user.fName)
+        clearUserData()
+        userLocalDatabaseEditor.putString("fName", user.fName)
         userLocalDatabaseEditor.putString("lName", user.lName)
         userLocalDatabaseEditor.putString("password", user.password)
         userLocalDatabaseEditor.putString("email", user.email)
-        userLocalDatabaseEditor.commit()
+
+        userLocalDatabaseEditor.apply()
     }
 
     fun setUserLoggedIn(loggedIn : Boolean){
         val userLocalDatabaseEditor = userLocalDatabase.edit()
         userLocalDatabaseEditor.putBoolean("loggedIn", loggedIn)
-        userLocalDatabaseEditor.commit()
+        userLocalDatabaseEditor.apply()
     }
 
     fun clearUserData(){
         val userLocalDatabaseEditor = userLocalDatabase.edit()
         userLocalDatabaseEditor.clear()
-        userLocalDatabaseEditor.commit()
+        userLocalDatabaseEditor.apply()
+    }
+
+    fun getUserLoggedIn(): Boolean{
+        return (userLocalDatabase.getBoolean("loggedIn",false))
+
     }
 
     fun getLoggedInUSer(): User?{
         if (!userLocalDatabase.getBoolean("loggedIn", false)) {
-            return null;
+            return null
         }
 
-        var fName = userLocalDatabase.getString("fname", "")
+        var fName = userLocalDatabase.getString("fName", "")
         var lName = userLocalDatabase.getString("lName", "")
         var password = userLocalDatabase.getString("password", "")
         var email = userLocalDatabase.getString("email", "")

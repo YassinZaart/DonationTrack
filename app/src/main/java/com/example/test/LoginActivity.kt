@@ -8,12 +8,18 @@ import android.widget.EditText
 
 class LoginActivity : AppCompatActivity() {
 
+    lateinit var userLocalStore :UserLocalStore
+    lateinit var email : EditText
+    lateinit var password : EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val username : EditText = findViewById(R.id.username)
-        val password : EditText = findViewById(R.id.password)
+        userLocalStore = UserLocalStore(this)
+
+        email = findViewById(R.id.email)
+        password = findViewById(R.id.password)
         val loginButton : Button = findViewById(R.id.login)
         val regButton : Button = findViewById(R.id.register)
         loginButton.setOnClickListener { login() }
@@ -21,6 +27,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
      fun login(){
+         var user = userLocalStore.getLoggedInUSer()
+        if(email.text.toString()== user?.email && password.text.toString()== user?.password)  {
+            userLocalStore.setUserLoggedIn(true)
+            val myIntent = Intent(this, MainActivity::class.java)
+            startActivity(myIntent)
+        }
 
     }
     fun register(){
