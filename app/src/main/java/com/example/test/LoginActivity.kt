@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_register.*
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var userLocalStore :UserLocalStore
+    lateinit var accountManager : AccountManager
     lateinit var email : EditText
     lateinit var password : EditText
 
@@ -16,7 +18,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        userLocalStore = UserLocalStore(this)
+        accountManager = AccountManager(this)
 
         email = findViewById(R.id.email)
         password = findViewById(R.id.password)
@@ -27,14 +29,20 @@ class LoginActivity : AppCompatActivity() {
     }
 
      fun login(){
-         var user = userLocalStore.getLoggedInUSer()
-        if(email.text.toString()== user?.email && password.text.toString()== user?.password)  {
-            userLocalStore.setUserLoggedIn(true)
-            val myIntent = Intent(this, MainActivity::class.java)
-            startActivity(myIntent)
-        }
+        var value = accountManager.logIn(email.text.toString(), password.text.toString())
+         var message = ""
+         if(value == 1 ){
+             val myIntent = Intent(this, MainActivity::class.java)
+             startActivity(myIntent)
+         }
+         else if(value == -1) message = "Email is unavailable"
+         else if(value == 0) message = "Incorrect password"
 
-    }
+         val toast = Toast.makeText(this,message,Toast.LENGTH_SHORT)
+         if(value!=1)toast.show()
+
+     }
+
     fun register(){
         val myIntent = Intent(this, RegisterActivity::class.java)
         startActivity(myIntent)

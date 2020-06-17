@@ -9,13 +9,14 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var userLocalStore : UserLocalStore
+
+    lateinit var accountManager: AccountManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        userLocalStore = UserLocalStore(this)
+        accountManager = AccountManager(this)
 
         val fnameText : TextView = findViewById(R.id.fName)
         val lnameText : TextView = findViewById(R.id.lName)
@@ -23,26 +24,27 @@ class MainActivity : AppCompatActivity() {
         val logoutButton : Button = findViewById(R.id.logout)
         logoutButton.setOnClickListener { onClick() }
 
-        var user = userLocalStore.getLoggedInUSer()
-        fnameText.text= user?.fName
-        lnameText.text=user?.lName
-        emailText.text=user?.email
+        fnameText.text = accountManager.user.fName
+        lnameText.text = accountManager.user.lName
+        emailText.text = accountManager.user.email
+
+
     }
 
     //Changes to login Screen if the user is not Logged in
-    override fun onStart() {
+  /*  override fun onStart() {
         super.onStart()
-        if(!userLocalStore.getUserLoggedIn()){
+
         val myIntent = Intent(this, LoginActivity::class.java)
         startActivity(myIntent)
-        }
-    }
+
+    }*/
 
 
 
     fun onClick(){
-        userLocalStore.clearUserData()
-        userLocalStore.setUserLoggedIn(false)
+
+        accountManager.signOut()
         val myIntent = Intent(this, LoginActivity::class.java)
         startActivity(myIntent)
 
