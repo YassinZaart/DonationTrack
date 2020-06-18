@@ -24,21 +24,22 @@ class MainActivity : AppCompatActivity() {
         val logoutButton : Button = findViewById(R.id.logout)
         logoutButton.setOnClickListener { onClick() }
 
-        fnameText.text = accountManager.user.fName
-        lnameText.text = accountManager.user.lName
-        emailText.text = accountManager.user.email
+        var user = accountManager.getLoggedInUser()
+        fnameText.text = user.fName
+        lnameText.text = user.lName
+        emailText.text = user.email
 
 
     }
 
-    //Changes to login Screen if the user is not Logged in
-  /*  override fun onStart() {
+
+   override fun onStart() {
         super.onStart()
-
-        val myIntent = Intent(this, LoginActivity::class.java)
-        startActivity(myIntent)
-
-    }*/
+        if(!accountManager.isLoggedIn()) {
+            val myIntent = Intent(this, LoginActivity::class.java)
+            startActivity(myIntent)
+        }
+    }
 
 
 
